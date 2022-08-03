@@ -22,9 +22,8 @@
 					<section class="section">
 						<div class="container">
 							<div class="content">
-								<?php
-                  $this->content();
-                ?>
+								<?php parseContent($this); ?>
+
 							</div>
 						</div>
 					</section>

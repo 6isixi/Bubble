@@ -33,7 +33,7 @@ function parseBblink() {
         let lnk = obj[i].getAttribute('link');
         let des = obj[i].getAttribute('des');
         let res = '<a href="';
-        res += lnk + '" class="friend-link" target="_blank"><div class="friend-container"><div class="friend-avatar rounded-circle" style="background:url(';
+        res += lnk + '" rel="nofollow" class="friend-link" target="_blank"><div class="friend-container"><div class="friend-avatar rounded-circle" style="background:url(';
         res += ico + ') center center / cover no-repeat;"></div><div class="friend-text"><h5>'
         res += obj[i].innerHTML + '</h5>' + des + '</div></div></a>';
         obj[i].innerHTML = res;

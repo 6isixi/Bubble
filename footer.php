@@ -53,13 +53,13 @@
 			<hr/>
 			<?php } ?>
 			<div class="row">
-				<div class="col-md-6">
-					<div class="copyright">
-						<?php _e($this->options->footerText); ?>
+				<div class="col-md-12">
+					<div class="copyright" style="text-align:center">
+						&copy; <?php echo date('Y'); ?> <a href="<?php $this->options->siteUrl(); ?>" class="footer-link" rel="nofollow" target="_blank"><?php $this->options->title() ?></a> | 书写了 <?php WordsCounter_Plugin::allOfCharacters(); ?> 字<br>Powered by <a class="footer-link" rel="nofollow" target="_blank" href="http://www.typecho.org">Typecho</a> | <?php _e($this->options->footerText); ?>
 					</div>
 				</div>
-				<div class="col-md-6">
-					<ul class="nav nav-footer justify-content-end">
+				<div class="col-md-12">
+					<ul class="nav nav-footer justify-content-center">
 						<li class="nav-item">
 							<a class="nav-link" href="<?php $this->options->siteUrl(); ?>">首页</a>
 						</li>
@@ -69,12 +69,14 @@
 								<a class="nav-link" href="<?php $pages->permalink(); ?>"><?php $pages->title(); ?></a>
 							</li>
 						<?php endwhile; ?>
-						<?php if($this->user->hasLogin()): ?>
-							<li class="nav-item"><a class="nav-link" href="<?php $this->options->adminUrl(); ?>">进入后台(<?php $this->user->screenName(); ?>)</a></li>
-							<li class="nav-item"><a class="nav-link" href="<?php $this->options->logoutUrl(); ?>">退出</a></li>
-						<?php else: ?>
-							<li class="nav-item"><a class="nav-link" href="<?php $this->options->adminUrl('login.php'); ?>">登录</a></li>
-						<?php endif; ?>
+						<li class="nav-item"><a class="nav-link" href="<?php $this->options->siteUrl(); ?>feed" >RSS</a></li>
+						<li class="nav-item"><a class="nav-link" href="<?php $this->options->siteUrl(); ?>sitemap.xml" >Sitemap</a></li>
+					</ul>
+					<ul class="nav nav-footer justify-content-center">
+						<li class="nav-item"><a class="nav-link" href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" target="_blank" rel="nofollow">本站由<img src="https://jsd.compc.cc/gh/6isixi/ImgCloud/img/youpaiyun.png" height="23" weight="45" hspace="2">提供 CDN 加速服务</a></li>
+					</ul>
+					<ul class="nav nav-footer justify-content-center">
+						<li class="nav-item"><a class="nav-link" href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow">备案号</a></li>
 					</ul>
 				</div>
 			</div>
@@ -87,10 +89,13 @@
 		</button>
 	</a>
 	<!-- Core -->
-	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
+	<script src="https://cdn.bootcdn.net/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+	<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.1/js/bootstrap.min.js"></script>
+	<script src="<?php $this->options->themeUrl("assets/js/timeago.min.js"); ?>">" ></script>
+	<script src="<?php $this->options->themeUrl("assets/js/ispeak-bber-md.min.js"); ?>">" ></script>
+	<script src="https://cdn.bootcdn.net/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
 	<!-- Optional plugins -->
-	<script src="https://cdn.jsdelivr.net/npm/headroom.js@0.11.0/dist/headroom.min.js"></script>
+	<script src="https://cdn.bootcdn.net/ajax/libs/headroom/0.12.0/headroom.min.js"></script>
 	<!-- Theme JS -->
 	<script src="<?php $this->options->themeUrl("assets/js/argon.min.js"); ?>"></script>
 	<script src="<?php $this->options->themeUrl("assets/js/bbrender.js"); ?>"></script>
@@ -168,7 +173,6 @@
 
 			<?php if($this->options->Pjax): ?>
       ;<?php $this->options->pjaxcomp() ?>;
-
 			try{
 				window.onload()
 			}catch(e){}
@@ -200,7 +204,7 @@
 			<?php endif; ?>
 	</script>
 	<?php if($this->options->Pjax): ?>
-	<script src="https://cdn.jsdelivr.net/npm/jquery-pjax@2.0.1/jquery.pjax.js"></script>
+	<script src="https://cdn.bootcdn.net/ajax/libs/jquery.pjax/2.0.1/jquery.pjax.min.js"></script>
 	<script src="<?php $this->options->themeUrl("assets/js/progress.js"); ?>"></script>
 	<script>
 		var pgid = 0
@@ -238,18 +242,18 @@
 	<?php endif; ?>
 	<!-- KaTeX JS -->
 	<?php if($this->options->katex): ?>
-	<script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+	<script src="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.15.3/katex.min.js"></script>
+	<script src="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.15.3/contrib/auto-render.min.js"></script>
 	<?php endif; ?>
 	<!-- Prism JS -->
 	<?php if($this->options->prismjs): ?>
-	<script src="https://cdn.jsdelivr.net/npm/prismjs@1.20.0/components/prism-core.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/prismjs@1.20.0/plugins/autoloader/prism-autoloader.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/prismjs@1.20.0/plugins/toolbar/prism-toolbar.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/prismjs@1.20.0/plugins/show-language/prism-show-language.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/prismjs@1.20.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
+	<script src="https://cdn.bootcdn.net/ajax/libs/prism/1.23.0/components/prism-core.min.js"></script>
+	<script src="https://cdn.bootcdn.net/ajax/libs/prism/1.23.0/plugins/autoloader/prism-autoloader.min.js"></script>
+	<script src="https://cdn.bootcdn.net/ajax/libs/prism/1.23.0/plugins/toolbar/prism-toolbar.min.js"></script>
+	<script src="https://cdn.bootcdn.net/ajax/libs/prism/1.23.0/plugins/show-language/prism-show-language.min.js"></script>
+	<script src="https://cdn.bootcdn.net/ajax/libs/prism/1.23.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
 	<?php if($this->options->prismLine): ?>
-		<script src="https://cdn.jsdelivr.net/npm/prismjs@1.20.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+		<script src="https://cdn.bootcdn.net/ajax/libs/prism/1.23.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
 	<?php endif; ?>
 	<?php endif; ?>
 	<!-- Alert -->
@@ -275,6 +279,11 @@
 		}
 		init()
 	</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+      $.fancybox.defaults.hash = false;
+    });
+</script>
 	<!-- Typecho footer -->
 	<?php $this->footer(); ?>
 	</body>

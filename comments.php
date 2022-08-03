@@ -1,14 +1,15 @@
-
 <?php function threadedComments($comments, $options) {
 		$commentLevelClass = $comments->_levels > 0 ? ' comment-child' : ' comment-parent';
 
-		$commentLine = [];
-		$indent = shouldCommentIndent($comments, $commentLine);
-		$parentAuthor = count($commentLine) >= 2? $commentLine[1]['author']:NULL;
-		$isTopLevel = count($commentLine) == 1;
-		$objectNick = Helper::options()->comment_object_nick!=='0';
+		$indent = true;
+		$commentLine = GetCommentLineInDb($comments->coid);
+		/* 有上上层评论且上上层评论和本层评论是同一个人 */
+		if(count($commentLine)==3 and ($commentLine[2]['author'] == $comments->author))
+			$indent = false;
+		if(count($commentLine)==1) /* 如果是最顶层的回复同样不需要缩进 */
+			$indent = false;
 ?>
-
+ 
 <li id="li-<?php $comments->theId(); ?>" class="<?php echo($indent? 'comment-child-indent':''); ?>">
 	<div id="<?php $comments->theId(); ?>">
 		<div  class="comment-item">
@@ -23,7 +24,7 @@
 			</div>
 			<div class="comment-body">
 				<div class="comment-head">
-					<h5><?php if ($comments->url) { ?><a target="_blank" rel="external nofollow" href="<?php echo $comments->url; ?>"><?php echo $comments->author; ?></a><?php } else { ?><?php echo $comments->author; ?><?php } ?><?php echo((!$isTopLevel && $objectNick)?(' <small>回复</small> ' . $parentAuthor):''); ?> · <small><?php $comments->date('Y-m-d H:i'); ?></small><?php
+					<h5><?php if ($comments->url) { ?><a target="_blank" rel="external nofollow" href="<?php echo $comments->url; ?>"><?php echo $comments->author; ?></a><?php } else { ?><?php echo $comments->author; ?><?php } ?><?php echo(count($commentLine) > 1?' <small>回复</small> ' . $commentLine[1]['author']:''); ?> · <small><?php $comments->date('Y-m-d H:i'); ?></small><?php
 					if ($comments->status == 'waiting') {
 						?><span class="badge badge-pill badge-default text-white">评论审核ing...</span><?php
 					}
@@ -82,7 +83,7 @@
 									<div class="input-group mb-4">
 										<div class="input-group-prepend">
 											<span class="input-group-text" style="padding: 0rem .5rem;">
-            									<div id="author-head" class="icon-shape rounded-circle text-white" style="width: 2rem;height: 2rem;background-image: url(https://secure.gravatar.com/avatar/);background-position: center;background-size: cover;background-repeat: no-repeat;"></div>
+            									<div id="author-head" class="icon-shape rounded-circle text-white" style="width: 2rem;height: 2rem;background-image: url(//cravatar.cn/avatar/);background-position: center;background-size: cover;background-repeat: no-repeat;"></div>
             								</span>
 										</div>
 										<input type="text" name="author" id="author" class="form-control" placeholder="名称" value="<?php $this->remember('author'); ?>" required />
@@ -112,12 +113,13 @@
 						</div>
 						<?php endif; ?>
 						<p>
-							<textarea rows="8" cols="50" name="text" id="textarea" class="form-control" required ><?php $this->remember('text'); ?></textarea>
+							<textarea rows="8" cols="50" name="text" id="textarea" class="form-control " required ><?php $this->remember('text'); ?></textarea>
 						</p>
-						<p>
-							<button type="submit" class="btn btn-outline-success" id="add-comment-button" style="float: right;"><?php _e('提交评论'); ?></button>
-						</p>
+						<button type="submit" class="btn btn-outline-success" id="add-comment-button " style="float: right;"><?php _e('提交评论'); ?></button>
+						</div>
 					</form>
+					<p>
+				</p>
 				</div>
 				<?php else: ?>
 				<div class="row align-items-center justify-content-center"><h3 id="response"><h3><?php _e('评论已关闭'); ?></h3></div>
@@ -286,7 +288,7 @@
     };
 
 	$("#mail").on('blur',function(){
-    	url = "https://secure.gravatar.com/avatar/" + md5($(this).val()) + "?s=40&d="
+    	url = "//cravatar.cn/avatar/" + md5($(this).val()) + "?s=40&d="
     	$("#author-head").css('background-image','url(' + url + ')'); 
     })
 

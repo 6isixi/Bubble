@@ -37,9 +37,8 @@
 						<section class="section">
 							<div class="container">
 								<div class="content">
-								<h1>这里空空如也</h1>
-								<hr/>
-								<p>不如换个地方看看吧？</p>
+								<h1>(≥o≤)</h1>
+								<h2>这里空空如也,换个地方看看吧</h2>
 								</div>
 							</div>
 						</section>

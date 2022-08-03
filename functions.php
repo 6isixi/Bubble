@@ -1,182 +1,7 @@
 <?php
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;
 function themeConfig($form) {
-	Typecho_Widget::widget('Widget_Themes_List')->to($themes);
-	foreach ($themes -> stack as $key => $value){
-		if($value["activated"]==1){
-			break;
-		}
-	}
 	
-	if(!file_exists("themeupdater.php")){
-		$updater = fopen("themeupdater.php", "w");
-		$txt = '
-		<html>
-			<head>
-				<title>Updater</title>
-				<meta charset="UTF-8">
-				<style>
-					html {
-						padding: 50px 10px;
-						font-size: 16px;
-						line-height: 1.4;
-						color: #666;
-						background: #F6F6F3;
-						-webkit-text-size-adjust: 100%;
-						-ms-text-size-adjust: 100%;
-					}
-
-					html,
-					input { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
-					body {
-						max-width: 500px;
-						max-height: 30px;
-						padding: 30px 20px;
-						margin: 0 auto;
-						background: #FFF;
-					}
-					ul {
-						padding: 0 0 0 40px;
-					}
-					.container {
-						max-width: 380px;
-						_width: 380px;
-						margin: 0 auto;
-					}
-				</style>
-			</head>
-			<body>
-				<div class="container">
-				<?php
-				function getJsonRequest($url){
-					$ch = curl_init();
-					curl_setopt($ch, CURLOPT_URL, $url);
-					curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-					curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
-					curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-					$output = curl_exec($ch);
-					curl_close($ch);
-					$output = json_decode($output,true);
-					return $output;
-				}
-				function deldir($dir) {
-					$dh=opendir($dir);
-					while ($file=readdir($dh)) {
-						if($file!="." && $file!="..") {
-							$fullpath=$dir."/".$file;
-							if(!is_dir($fullpath)) {
-								unlink($fullpath);
-							} else {
-								deldir($fullpath);
-							}
-						}
-					}
-					closedir($dh);
-					if(rmdir($dir)) {
-						return true;
-					} else {
-						return false;
-					}
-				}
-				function getRequest($url){
-					$ch = curl_init();
-					curl_setopt($ch, CURLOPT_URL, $url);
-					curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-					curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
-					curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-					$output = curl_exec($ch);
-					curl_close($ch);
-					return $output;
-				}
-				$dir = "../usr/themes/Bubble";
-
-				try{
-					$version = getJsonRequest("https://data.jsdelivr.com/v1/package/resolve/gh/trinitrotofu/Bubble")["version"];
-					$files = getJsonRequest("https://data.jsdelivr.com/v1/package/gh/trinitrotofu/Bubble@" . $version . "/flat")["files"];
-					if(file_exists($dir)) deldir($dir);
-
-					foreach ($files as $key => $value){
-						$filecontent = getRequest("https://cdn.jsdelivr.net/gh/trinitrotofu/Bubble@" . $version . "/" .$value["name"]);
-						if (!file_exists(dirname($dir.$value["name"]))){
-							mkdir(dirname($dir.$value["name"]),0755,true);
-						}
-						$fileobj = fopen($dir.$value["name"], "w");
-						fwrite($fileobj, $filecontent);
-						fclose($fileobj);
-					}
-					
-					echo "主题更新成功！即将返回主题页面。";
-					echo \'<meta http-equiv="refresh" content="3;url=themes.php">\';
-					@unlink ("themeupdater.php");  
-				}catch(Exception $e){
-					echo "更新失败！请查看错误信息或者手动更新。<br>";
-					echo $e;
-				}
-				?>
-				</div>
-			</body>
-		</html>';
-		fwrite($updater, $txt);
-		fclose($updater);
-	}
-	
-	echo '<script>
-		var version = "' . $value["version"] . '"
-		function toNum(a){
-			var a=a.toString();
-			var c=a.split('.');
-			var num_place=["","0","00","000","0000"],r=num_place.reverse();
-			for (var i=0;i<c.length;i++){ 
-				var len=c[i].length;	   
-				c[i]=r[len]+c[i];  
-			} 
-			var res = c.join(""); 
-			return res; 
-		} 
-		
-	</script>';
-	
-	echo 
-	'
-	<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
-	<ul class="typecho-option typecho-option-submit">
-		<li>
-			<label class="typecho-label">
-				主题更新
-			</label>
-		</li>
-		<li>
-			<p class="description" id="update-dec">
-				正在检查更新...
-			</p>
-		</li>
-		<li hidden id="update-btn-li">
-			<button type="button" class="btn default" id="update-btn">
-			</button>
-		</li>
-	</ul>
-	<script>
-		$.ajax({
-		url: "https://data.jsdelivr.com/v1/package/resolve/gh/trinitrotofu/Bubble",
-		dataType: "json",
-		timeout: 10000,
-		success: function(data) {
-			var releaseVersion = data["version"]
-			$("#update-btn-li").show()
-			$("#update-dec").html("")
-
-			$("#update-btn").html("最新版本号为" + releaseVersion + "，当前版本为" + version + "，" + (toNum(releaseVersion) > toNum(version) ? "你正在使用旧版本主题。点击更新" : "你已更新至最新版本"));
-			if (toNum(releaseVersion) > toNum(version)) {
-				$("#update-btn").click(function() {
-					window.location.href = "themeupdater.php"
-				});
-			}
-		},
-		error: function() {
-			$("#update-dec").html("检查更新程序出错！")
-		}
-	});
-	</script>';
 
 	$subtitle = new Typecho_Widget_Helper_Form_Element_Text('subtitle', NULL, '', _t('站点副标题'), _t('在这里填入站点副标题，以在网站标题后显示'));
 	$form->addInput($subtitle);
@@ -232,18 +57,6 @@ function themeConfig($form) {
 		),
 		'0', _t('默认 TOC 目录展开状态'), _t('选择打开文章时 TOC 目录的展开状态'));
 	$form->addInput($toc_enable);
-	$comment_indent_style = new Typecho_Widget_Helper_Form_Element_Radio('comment_indent_style',
-		array('native' => _t('Typecho风格'),
-			'bubble' => _t('Bubble风格'),
-		),
-		'bubble', _t('评论缩进风格'), _t('选择评论缩进的风格，Typecho风格会为每一层回复进行缩进，Bubble风格会在需要的时候合并评论到同一层里，方便阅读'));
-	$form->addInput($comment_indent_style);
-	$comment_object_nick = new Typecho_Widget_Helper_Form_Element_Radio('comment_object_nick',
-		array('0' => _t('不显示'),
-			'1' => _t('显示'),
-		),
-		'1', _t('被回复人的昵称显示'), _t('选择是否显示被回复人的昵称，显示"aa 回复 bb"，或者只显示"aa"'));
-	$form->addInput($comment_object_nick);
 
 	$header_links_html = '
 	<style>
@@ -382,10 +195,9 @@ function printAricle($that, $flag) { ?>
 						<span class="list-tag"><i class="fa fa-calendar-o" aria-hidden="true"></i> <time datetime="<?php $that->date('c'); ?>"><?php $that->date();?></time></span>
 						<span class="list-tag"><i class="fa fa-comments-o" aria-hidden="true"></i> <?php $that->commentsNum('%d');?> 条评论</span>
 						<?php printCategory($that, 1); ?>
-						<?php printTag($that, 1); ?>
 						<span class="list-tag"><i class="fa fa-user-o" aria-hidden="true"></i> <a class="badge badge-warning badge-pill" href="<?php $that->author->permalink(); ?>"><?php $that->author();?></a></span>
 					</div>
-					<?php $that->excerpt(200,'...'); ?>
+					<?php $that->excerpt(210,'...'); ?>
 				</div>
 			</div>
 		</object>
@@ -400,7 +212,6 @@ function printAricle($that, $flag) { ?>
 						<span class="list-tag"><i class="fa fa-calendar-o" aria-hidden="true"></i> <time datetime="<?php $that->date('c'); ?>"><?php $that->date();?></time></span>
 						<span class="list-tag"><i class="fa fa-comments-o" aria-hidden="true"></i> <?php $that->commentsNum('%d');?> 条评论</span>
 						<?php printCategory($that, 1); ?>
-						<?php printTag($that, 1); ?>
 						<span class="list-tag"><i class="fa fa-user-o" aria-hidden="true"></i> <a class="badge badge-warning badge-pill" href="<?php $that->author->permalink(); ?>"><?php $that->author();?></a></span>
 					</div>
 					<?php $that->excerpt(200,'...'); ?>
@@ -507,7 +318,7 @@ function getCatalog() {
 	echo $index;
 }
 
-function getCommentLineInDb($coid, $depth=3) { // 3 for getting this comment, the parent and the grandparent by default
+function GetCommentLineInDb($coid, $depth=3) { // 3 for getting this comment, the parent and the grandparent by default
 	$db = Typecho_Db::get();
 	$commentLine = [];
 	while((count($commentLine) < $depth) and (isset($coid) and 0 != $coid)) {
@@ -519,30 +330,6 @@ function getCommentLineInDb($coid, $depth=3) { // 3 for getting this comment, th
 	return $commentLine;
 }
 
-function shouldCommentIndent($comment, &$comment_line=NULL) {
-	$commentIndentStyle = Helper::options()->comment_indent_style;
-	$commentLine = getCommentLineInDb($comment->coid);
-	$isTopLevel = count($commentLine) == 1;
-	$thisAuthor = $comment->author;
-	$parentAuthor = count($commentLine) >= 2? $commentLine[1]['author']:NULL;
-	$grandparentAuthor = count($commentLine) >= 3? $commentLine[2]['author']:NULL;
-	$indent = false;
-	if($commentIndentStyle==NULL || $commentIndentStyle=='bubble') {
-		$indent = !$isTopLevel; // 顶层回复不需要缩进，非顶层回复才需要缩进
-		// 有父评论和爷评论
-		if($parentAuthor && $grandparentAuthor) {
-			// 本评论和爷评论或者父评论是同一人发布时，不需要缩进
-			$indent &= !($thisAuthor == $parentAuthor || $thisAuthor == $grandparentAuthor);
-		}
-	} else {
-		$indent = true;
-	}
-	if($comment_line!==NULL) {
-		$comment_line = $commentLine;
-	}
-	return $indent;
-}
-
 function themeInit($archive) {
 
 }
@@ -550,4 +337,64 @@ function themeInit($archive) {
 function themeFields($layout) {
     $logoUrl = new Typecho_Widget_Helper_Form_Element_Text('pic', NULL, NULL, _t('文章头图地址'), _t('在这里填入一个图片URL地址, 就可以让文章加上头图'));
     $layout->addItem($logoUrl);
+}
+
+/** 邮箱判定，对QQ邮箱的评论头像调用QQ头像 */
+function isqq($email)
+{
+    if ($email) {
+		if ($email == "804770253@qq.com"){
+			echo "//cdn.yecvip.cn/gh/6isixi/ImgCloud/avatar.jpg";
+		} else if (strpos($email, "@qq.com") !== false) {
+            $email = str_replace('@qq.com', '', $email);
+            if(is_numeric($email)){
+            echo "//q1.qlogo.cn/g?b=qq&nk=" . $email . "&s=100";
+            }else{
+                $mmail = $email.'@qq.com';
+                $email = md5($mmail);
+                echo "//dn-qiniu-avatar.qbox.me/avatar/" . $email . "?s=100";
+            }
+            
+        } else {
+            $email = md5($email);
+            echo "//dn-qiniu-avatar.qbox.me/avatar/" . $email . "?s=100";
+        }
+    } else {
+        echo "//dn-qiniu-avatar.qbox.me/avatar/null?s=100";
+    }
+}
+
+function timer_start() {
+	global $timestart;
+	$mtime     = explode( ' ', microtime() );
+	$timestart = $mtime[1] + $mtime[0];
+	return true;
+}
+timer_start();
+function timer_stop( $display = 0, $precision = 3 ) {
+	global $timestart, $timeend;
+	$mtime     = explode( ' ', microtime() );
+	$timeend   = $mtime[1] + $mtime[0];
+	$timetotal = number_format( $timeend - $timestart, $precision );
+	$r         = $timetotal < 1 ? $timetotal * 1000 . " ms" : $timetotal . " s";
+	if ( $display ) {
+		echo $r;
+	}
+	return $r;
+}
+function debug_to_console( $data ) {
+    $output = $data;
+    echo "<script>console.log( '加载耗时: " . $output . "' );</script>";
+}
+function pjax_debug_to_console( $data ) {
+    $output = $data;
+    echo "console.log( '加载耗时: " . $output . "' );";
+}
+
+function parseContent($obj){
+    $obj->content = preg_replace("/<a href=\"([^\"]*)\">/i", "<a href=\"\\1\" target=\"_blank\">", $obj->content);
+    $pattern = '/<\s*img[\s\S]+?(?:src=[\'"]([\S\s]*?)[\'"]\s*|alt=[\'"]([\S\s]*?)[\'"]\s*|[a-z]+=[\'"][\S\s]*?[\'"]\s*)+[\s\S]*?>/i';
+    $replacement = '<figure><a href="$1" data-fancybox="gallery" no-pjax data-type="image" data-caption="$2" ><img src="$1" alt="$2" title="点击放大图片"></a></figure>';
+    $obj->content = preg_replace($pattern, $replacement, $obj->content);
+    echo trim($obj->content);
 }

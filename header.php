@@ -7,11 +7,29 @@
   }
   ?>
 <!DOCTYPE html>
-<html>
+<html lang="zh-cmn-Hans" class="no-js">
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+    <!-- 关闭百度转码 -->
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <!-- end #optimize -->
+    <meta charset="<?php $this->options->charset(); ?>">
+    <!-- IE 8浏览器的页面渲染方式 & 默认使用极速内核：针对国内浏览器产商 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <!–-[if IE]>
+	<script src="https://cdn.bootcdn.net/ajax/libs/html5shiv/r29/html5.min.js"></script>
+    <![endif]-->
+    <!--chrome Android 地址栏颜色-->
+    <meta name="theme-color" content="#ffffff"/>
+    <!-- 自适应 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
+    <link rel="preconnect" href="//cdn.bootcdn.net" />
+    <link rel="preconnect" href="//gstatic.loli.net" />
+    <link rel="preconnect" href="//fonts.loli.net" />
+    <link rel="preconnect" href="//cravatar.cn/avatar/" />
+    <link rel="preconnect" href="//6262-bb-f5c0f-1252354806.tcb.qcloud.la" />
 	<title><?php $this->archiveTitle(array(
 			'category'  =>  _t('%s 下的文章'),
 			'search'    =>  _t('包含关键字 %s 的文章'),
@@ -32,35 +50,36 @@
 	?>" rel="icon" type="image/png">
 
 	<!-- Fonts -->
-	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+	<link href="https://fonts.loli.net/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
 
 	<!-- FontAwesome -->
-	<link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
 	<!-- Main CSS -->
 	<link type="text/css" href="<?php $this->options->themeUrl("assets/css/main.min.css"); ?>" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
 
 	<!-- KaTeX CSS -->
 	<?php if ($this->options->katex): ?>
-	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+	<link rel="stylesheet" type="text/css" href="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.15.3/katex.min.css">
 	<?php endif; ?>
 
 	<!-- PrismJS CSS -->
 	<?php if ($this->options->prismjs): ?>
-	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/prismjs@1.20.0/themes/<?php $this->options->prismTheme(); ?>.css" />
-	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/prismjs@1.20.0/plugins/toolbar/prism-toolbar.css" />
+	<link rel="stylesheet" type="text/css" href="https://cdn.bootcdn.net/ajax/libs/prism-themes/1.9.0/prism-darcula.min.css" />
+	<link rel="stylesheet" type="text/css" href="https://cdn.bootcdn.net/ajax/libs/prism/1.28.0/plugins/toolbar/prism-toolbar.css" />
 		<?php if ($this->options->prismLine): ?>
-		<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/prismjs@1.20.0/plugins/line-numbers/prism-line-numbers.css" />
+		<link rel="stylesheet" type="text/css" href="https://cdn.bootcdn.net/ajax/libs/prism/1.28.0/plugins/line-numbers/prism-line-numbers.css" />
 		<?php endif; ?>
 	<?php endif; ?>
 
 	<!-- Viewer CSS -->
 	<?php if ($this->options->viewerEnable): ?>
-	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/viewerjs/dist/viewer.min.css" />
+	<link rel="stylesheet" type="text/css" href="https://cdn.bootcdn.net/ajax/libs/imageviewer/1.1.0/viewer.min.css" />
 	<?php endif; ?>
 
 	<!-- Jquery -->
-	<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+	<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 	<!-- Custom CSS -->
 	<?php if ($this->options->customCss): ?>
@@ -69,15 +88,14 @@
 
 	<!-- Viewer.js Plugin -->
 	<?php if ($this->options->viewerEnable): ?>
-	<script src="https://cdn.jsdelivr.net/npm/viewerjs/dist/viewer.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/gh/fengyuanchen/jquery-viewer@master/dist/jquery-viewer.min.js"></script>
+	<script src="https://cdn.bootcdn.net/ajax/libs/imageviewer/1.1.0/viewer.min.js"></script>
 	<?php endif; ?>
 
 	<!-- MD5 Js -->
-	<script src="https://cdn.jsdelivr.net/gh/blueimp/JavaScript-MD5/js/md5.min.js"></script>
+	<script src="<?php $this->options->themeUrl("assets/js/md5.min.js"); ?>">" ></script>
 	<!-- LazyLoad Js -->
-	<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/dkern/jquery.lazy/jquery.lazy.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/dkern/jquery.lazy/jquery.lazy.plugins.min.js"></script>
+	<script src="<?php $this->options->themeUrl("assets/js/jquery.lazy.min.js"); ?>">" ></script>
+	<script src="<?php $this->options->themeUrl("assets/js/jquery.lazy.plugins.min.js"); ?>">" ></script>
 	<!-- Typecho header -->
 	<?php if($this->options->Pjax=="1"): ?>
 		<?php $this->header('commentReply=&antiSpam='); ?>
@@ -86,6 +104,12 @@
 	<?php endif; ?>
 </head>
 <body>
+<!--[if IE]>
+<script>
+alert("你正在使用 过时 的浏览器，请 升级浏览器 以获得更好的体验！");
+window.location.href="https://support.dmeng.net/upgrade-your-browser.html?referrer="+encodeURIComponent(window.location.href);
+</script>
+<![endif]-->
 	<header class="header-global">
 		<nav id="navbar-main" class="navbar navbar-main navbar-expand-lg navbar-transparent navbar-light headroom">
 			<div class="container">
@@ -112,6 +136,17 @@
 							<a class="nav-link" href="<?php $this->options->siteUrl(); ?>">首页</a>
 						</li>
 						<li class="nav-item">
+						
+						<li class="nav-item dropdown">
+              					<a href="#" class="nav-link" data-toggle="dropdown" role="button" aria-expanded="false">分类</a>
+              					<div class="dropdown-menu">
+          					<?php
+							$this->widget('Widget_Metas_Category_List')->to($pages);
+							while($pages->next()):
+						?>
+						<a class="dropdown-item" href="<?php $pages->permalink(); ?>" title="<?php $pages->name(); ?>"><?php $pages->name(); ?></a>
+                  				<?php endwhile; ?>
+						
 						<?php
 							$this->widget('Widget_Contents_Page_List')->to($pages);
 							while($pages->next()):
@@ -135,7 +170,7 @@
 									<div class="input-group-prepend">
 										<span class="input-group-text"><i class="fa fa-search"></i></span>
 									</div>
-									<input type="text" name="s" class="form-control" placeholder="搜点什么……" type="text" autocomplete="off">
+									<input type="text" name="s" class="form-control" placeholder="搜索一下疑惑吧！" type="text" autocomplete="off">
 								</div>
 							</form>
 						</li>

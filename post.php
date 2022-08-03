@@ -140,13 +140,12 @@ $this->need('header.php');
 								</script>
 							</div>
 							<?php }else{ ?>
-							<?php
-                $this->content();
-							?>
+							<?php parseContent($this); ?>
+
 							<hr>
 							<ul>
-								<li>分类：<?php printCategory($this); ?></li>
-								<li>标签：<?php printTag($this); ?></li>
+								<li>本文于 <time datetime="<?php $this->date('c'); ?>"><?php echo date('d/m/Y A' , $this->modified); ?></time>  最后一次更新内容，请注意甄别内容的时效性</li>
+								<li>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank"  rel="nofollow">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="<?php $this->permalink() ?>" target="_blank"><?php $this->title() ?></a></li>
 							</ul>
 							<?php } ?>
 						</div>
